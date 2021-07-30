@@ -17,7 +17,7 @@ namespace PromotionEngine.Engines
                 if (promotion.PromotionItems.Count > 0)
                 {
                     int promoQuantity = 0;
-                    int itemQuantity = 0;
+                    //int itemQuantity = 0;
                     int i = 0;
                     Item currentItem = null;
                     while (i < items.Count)
@@ -51,21 +51,25 @@ namespace PromotionEngine.Engines
                         .Where(j => j.PromoQuantity > 0)
                         .ToList();
 
-                    i = 0;
-                    while (i < items.Count)
+                    if(matches.Count > 0)
                     {
-                        currentItem = items[i];
-                        var match = matches.Find(m => m.ItemId == currentItem.ItemId);
-                        if (match != null)
+                        i = 0;
+                        while (i < items.Count)
                         {
-                            Item newItem = new Item(currentItem.ItemId, currentItem.ItemType, currentItem.InitialQuantity);
-                            newItem.EffectiveQuantity = match.ItemQuantity;
-                            Item promoItem = new Item(promotion.Id.ToString(), "Promotion", promoQuantity);
-                            items.RemoveAt(i);
-                            items.Insert(i, newItem);
-                            items.Add(promoItem);
+                            currentItem = items[i];
+                            var match = matches.Find(m => m.ItemId == currentItem.ItemId);
+                            if (match != null)
+                            {
+                                Item newItem = new Item(currentItem.ItemId, currentItem.ItemType, currentItem.InitialQuantity);
+                                newItem.EffectiveQuantity = match.ItemQuantity;
+                                Item promoItem = new Item(promotion.Id.ToString(), "Promotion", match.PromoQuantity);
+                                items.RemoveAt(i);
+                                items.Insert(i, newItem);
+                                items.Add(promoItem);
+                            }
+                            i++;
                         }
-                    }
+                    }                    
                 }
             }
 
