@@ -12,6 +12,7 @@ namespace PromotionEngine.Engines
             // Look for required promotion in items, use the first one found
             foreach(Promotion promotion in promotions)
             {
+                var matchingItems = new List<Item>();
                 if (promotion.PromotionItems.Count > 0)
                 {
                     int promoQuantity = 0;
@@ -25,29 +26,27 @@ namespace PromotionEngine.Engines
                         matchingItem = promotion.PromotionItems.Find(pi => pi.ItemId == currentItem.ItemId);
                         if (matchingItem != null)
                         {
-                            if (matchingItem.EffectiveQuantity <= currentItem.EffectiveQuantity)
-                            {
-                                promoQuantity = currentItem.EffectiveQuantity / matchingItem.EffectiveQuantity;
-                                itemQuantity = currentItem.EffectiveQuantity % matchingItem.EffectiveQuantity;
-                                if (promoQuantity > 0)
-                                {
-                                    Item newItem = new Item(currentItem.ItemId, currentItem.ItemType, currentItem.InitialQuantity);
-                                    Item promoItem = new Item(promotion.Id.ToString(), "Promotion", promoQuantity);
-                                    newItem.EffectiveQuantity = itemQuantity;
-                                    items.RemoveAt(i);
-                                    items.Insert(i, newItem);
-                                    items.Add(promoItem);
-                                    break;
-                                }
-                            }
+                            matchingItems.Add(matchingItem);
+                            //if (matchingItem.EffectiveQuantity <= currentItem.EffectiveQuantity)
+                            //{
+                            //    promoQuantity = currentItem.EffectiveQuantity / matchingItem.EffectiveQuantity;
+                            //    itemQuantity = currentItem.EffectiveQuantity % matchingItem.EffectiveQuantity;
+                            //    if (promoQuantity > 0)
+                            //    {
+                            //        Item newItem = new Item(currentItem.ItemId, currentItem.ItemType, currentItem.InitialQuantity);
+                            //        Item promoItem = new Item(promotion.Id.ToString(), "Promotion", promoQuantity);
+                            //        newItem.EffectiveQuantity = itemQuantity;
+                            //        items.RemoveAt(i);
+                            //        items.Insert(i, newItem);
+                            //        items.Add(promoItem);
+                            //        break;
+                            //    }
+                            //}
                             
                         }
                         i++;
                     }
-                    //if (promoQuantity > 0)
-                    //{
-                    //    break;
-                    //}
+                    
                 }
             }
 
