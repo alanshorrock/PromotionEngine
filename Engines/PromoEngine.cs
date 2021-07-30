@@ -1,6 +1,7 @@
 ﻿using PromotionEngine.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace PromotionEngine.Engines
@@ -19,11 +20,10 @@ namespace PromotionEngine.Engines
                     int itemQuantity = 0;
                     int i = 0;
                     Item currentItem = null;
-                    Item matchingItem = null;
                     while (i < items.Count)
                     {
                         currentItem = items[i];
-                        matchingItem = promotion.PromotionItems.Find(pi => pi.ItemId == currentItem.ItemId);
+                        Item matchingItem = promotion.PromotionItems.Find(pi => pi.ItemId == currentItem.ItemId);
                         if (matchingItem != null)
                         {
                             matchingItems.Add(matchingItem);
@@ -41,12 +41,31 @@ namespace PromotionEngine.Engines
                             //        items.Add(promoItem);
                             //        break;
                             //    }
-                            //}
-                            
+                            //}                            
                         }
                         i++;
                     }
-                    
+                    var matches = matchingItems
+                        .Join(items, mi => mi.ItemId, i => i.ItemId,
+                        (mi, i) => new { ItemId = i.ItemId, ItemQuantity = i.EffectiveQuantity % mi.EffectiveQuantity, PromoQuantity = i.EffectiveQuantity / mi.EffectiveQuantity })
+                        .Where(j => j.PromoQuantity > 0)
+                        .ToList();
+
+                    i = 0;
+                    while (i < items.Count)
+                    {
+                        currentItem = items[i];
+                        var match = matches.Find(m => m.ItemId == currentItem.ItemId);
+                        if (match != null)
+                        {
+                            Item newItem = new Item(currentItem.ItemId, currentItem.ItemType, currentItem.InitialQuantity);
+                            newItem.EffectiveQuantity = match.ItemQuantity;
+                            Item promoItem = new Item(promotion.Id.ToString(), "Promotion", promoQuantity);
+                            items.RemoveAt(i);
+                            items.Insert(i, newItem);
+                            items.Add(promoItem);
+                        }
+                    }
                 }
             }
 
