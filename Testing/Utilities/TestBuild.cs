@@ -30,13 +30,13 @@ namespace PromotionEngine.Testing.Utilities
             var currentPromotion_2 = new Promotion(2, currentPromotionItems_2, 45);
             promotions.Add(currentPromotion_2);
 
-            //var currentPromotionItems_3 = new List<Item>
-            //{
-            //    new Item("C", "SKU", 1),
-            //    new Item("D", "SKU", 1)
-            //};
-            //var currentPromotion_3 = new Promotion(3, currentPromotionItems_3, 30);
-            //promotions.Add(currentPromotion_3);
+            var currentPromotionItems_3 = new List<Item>
+            {
+                new Item("C", "SKU", 1),
+                new Item("D", "SKU", 1)
+            };
+            var currentPromotion_3 = new Promotion(3, currentPromotionItems_3, 30);
+            promotions.Add(currentPromotion_3);
         }
 
         public List<Item> BuildScenario_A()
@@ -58,6 +58,19 @@ namespace PromotionEngine.Testing.Utilities
                 new Item("A", "SKU", 5),
                 new Item("B", "SKU", 5),
                 new Item("C", "SKU", 1)
+            };
+
+            return items;
+        }
+
+        public List<Item> BuildScenario_C()
+        {
+            var items = new List<Item>
+            {
+                new Item("A", "SKU", 3),
+                new Item("B", "SKU", 5),
+                new Item("C", "SKU", 1),
+                new Item("D", "SKU", 1)
             };
 
             return items;

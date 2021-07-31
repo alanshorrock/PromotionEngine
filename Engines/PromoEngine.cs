@@ -16,8 +16,6 @@ namespace PromotionEngine.Engines
                 var matchingItems = new List<Item>();
                 if (promotion.PromotionItems.Count > 0)
                 {
-                    int promoQuantity = 0;
-                    //int itemQuantity = 0;
                     int i = 0;
                     Item currentItem = null;
                     while (i < items.Count)
@@ -51,7 +49,7 @@ namespace PromotionEngine.Engines
                         .Where(j => j.PromoQuantity > 0)
                         .ToList();
 
-                    if(matches.Count > 0)
+                    if(matches.Count == promotion.PromotionItems.Count)
                     {
                         i = 0;
                         while (i < items.Count)
@@ -62,10 +60,14 @@ namespace PromotionEngine.Engines
                             {
                                 Item newItem = new Item(currentItem.ItemId, currentItem.ItemType, currentItem.InitialQuantity);
                                 newItem.EffectiveQuantity = match.ItemQuantity;
-                                Item promoItem = new Item(promotion.Id.ToString(), "Promotion", match.PromoQuantity);
                                 items.RemoveAt(i);
                                 items.Insert(i, newItem);
-                                items.Add(promoItem);
+                                var promoID = promotion.Id.ToString();
+                                if (items.Find(i => i.ItemId == promoID) == null)
+                                {
+                                    Item promoItem = new Item(promoID, "Promotion", match.PromoQuantity);
+                                    items.Add(promoItem);
+                                }                                
                             }
                             i++;
                         }

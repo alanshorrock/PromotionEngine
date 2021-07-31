@@ -42,5 +42,21 @@ namespace PromotionEngine//.Testing
                         
             Assert.AreEqual(370, result);
         }
+
+        [TestMethod]
+        public void Scenario_C_TestMethod()
+        {
+            List<SkuPrice> skuPrices = new List<SkuPrice>();
+            List<Promotion> promotions = new List<Promotion>();
+
+            TestBuild testBuild = new TestBuild();
+            testBuild.BuildTestData(skuPrices, promotions);
+            var checkoutItems = testBuild.BuildScenario_C();
+
+            var engine = new PromoEngine();
+            var result = engine.GetPriceWithPromotion(checkoutItems, promotions, skuPrices);
+
+            Assert.AreEqual(280, result);
+        }
     }
 }
