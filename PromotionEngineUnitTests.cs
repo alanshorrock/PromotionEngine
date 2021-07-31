@@ -11,7 +11,6 @@ namespace PromotionEngine//.Testing
     [TestClass]
     public class PromotionEngineUnitTests
     {
-
         [TestMethod]
         public void Scenario_A_TestMethod()
         {
